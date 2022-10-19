@@ -1,7 +1,7 @@
 package com.radiojavan.downloader.services.impl;
 
 import com.google.common.base.Strings;
-import com.radiojavan.downloader.models.ResponseModel;
+import com.radiojavan.downloader.exceptions.BadParamException;
 import com.radiojavan.downloader.services.DownloaderService;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
@@ -19,7 +19,7 @@ public class DownloaderServiceSeleniumImpl implements DownloaderService {
 
     private static final String FIREFOX_GECKO_DRIVER_SYSTEM_PROPERTY_NAME = "webdriver.gecko.driver";
 
-    @Value("${config.selenium.webdriver.firefox.geckodriver.executable:#{\"\"}}")
+    @Value("${config.selenium.webdriver.firefox.geckodriver.executable:}")
     private String GECKO_DRIVER_EXECUTABLE_PATH;
 
     @PostConstruct
@@ -36,7 +36,7 @@ public class DownloaderServiceSeleniumImpl implements DownloaderService {
 
         if (Strings.isNullOrEmpty(playerUrl)) {
             LOGGER.info("getFileUrl(). playerUrl is either null or empty. Aborting request...");
-            return null;
+            throw new BadParamException();
         }
 
         LOGGER.info("getFileUrl(). starting the process for playerUrl <{}>", playerUrl);
